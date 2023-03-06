@@ -1,0 +1,15 @@
+CC=g++
+FLAGS=-std=c++20 -Wall -pedantic -Werror -Wextra -Wno-unused-parameter
+TEST_LIB=-lgtest -lgtest_main -lpthread
+
+all: lab1 test_bin
+
+
+test_bin: lab1_test.cpp
+	$(CC) $(FLAGS) lab1_test.cpp -o test_bin $(TEST_LIB)
+
+test:
+	./test_bin
+
+clean:
+	rm -f .o test_bin
