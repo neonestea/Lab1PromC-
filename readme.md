@@ -61,7 +61,7 @@ constexpr size_t size() {}
 2.	size_ - Размер (для упрощения работы), тип size_t
 Codestyle: https://style-guides.readthedocs.io/en/latest/cpp.html
 Обертка:
-Изначально будет создано 5 пустых массивов:   MyArray<int, MAX> arr = {0, 0, 0, 0, 0, 0}; //пример создания массива
+Изначально будет создано 5 пустых массивов:   MyArray<int, MAX> arr = {0, 0, 0, 0, 0, 0}; //пример создания массива - пусть работаем с типом int
 
 Размер определен макросом #define MAX 6
 
