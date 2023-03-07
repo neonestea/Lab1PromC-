@@ -19,8 +19,8 @@ template <class T, size_t N>
 MyArray(){};
 2.	Operator[] - обращение к элементу в указанной позиции, возвращаем data_[i];
 Value_type& operator[](int i) {};
-3.	Operator at() - обращение к элементу в указанной позиции, итератор на элемент;
-iterator at(int i) {};
+3.	Operator at() - обращение к элементу в указанной позиции, возвращаем data_[i];
+Value_type& at(int i) {};
 4.	Empty – проверка, что size_ == 0
 bool empty(){};
 5.	Size – размер (количество элементов) (size_)
