@@ -20,7 +20,7 @@ MyArray(){};
 1.2 Constructor, принимающий список инициализации
 MyArray (std::initializer_list<T> list){};
 2.	Operator[] - обращение к элементу в указанной позиции, возвращаем data_[i];
-Value_type& operator[](int i) {};
+Value_type& operator[](size_t i) {};
 3.	Operator at() - обращение к элементу в указанной позиции, возвращаем data_[i];
 Value_type& at(int i) {};
 4.	Empty – проверка, что size_ == 0
@@ -50,14 +50,14 @@ bool operator>=(const MyArray& other){};
 16.	Operator<= - оператор меньше либо равно (по сумме элементов)
 bool operator<=(const MyArray& other){};
 17.	front() – указатель на первый элемент +const 
-T& front() {};
+value_type& front() {};
 18.	back() – указатель на последний элемент +const 
-T& back() {};
+value_type& back() {};
 19.	получение размера массива на этапе компиляции
 constexpr size_t size() {}
 
 Поля класса:
-1.	data_ - статический массив типа T
+1.	data_ - статический массив типа value_type
 2.	size_ - Размер (для упрощения работы), тип size_t
 Codestyle: https://style-guides.readthedocs.io/en/latest/cpp.html
 Обертка:
@@ -79,6 +79,6 @@ Codestyle: https://style-guides.readthedocs.io/en/latest/cpp.html
 11.	Распечатать первый элемент массива front() (ввести номер массива) 
 12.	Распечатать первый элемент массива back() (ввести номер массива) 
 13.	Распечатать массив (ввести номер массива) 
-14.	Создать массив (ввести размер) массивы будут создаваться с именами arr+N, где N – порядковый номер, создать можно не более 5 массивов
+14.	Создать массив (ввести размер) массивы будут создаваться с именами arr+N, где N – порядковый номер, создать можно не более 5 массивов //!не поддерживается
 15.	Выйти из программы
 
