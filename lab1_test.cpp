@@ -3,7 +3,7 @@
 #include "lab1.hpp"
 #include <string>
 
-
+#define MAX 6
 
 class TestFoo : public ::testing::Test
 {
@@ -12,11 +12,11 @@ class TestFoo : public ::testing::Test
         void TearDown() {}
 };
 
-TEST(TestUtils, my_test) //Правильный случай
+TEST(TestUtils, my_test) //Правильный случай, для примера взят массив int
 {
-    MyArray<int, 6> arr;
-    MyArray<int, 6> arr2;
-    MyArray<int, 6> arr3;
+    MyArray<int, MAX> arr = {0, 0, 0, 0, 0, 0};
+    MyArray<int, MAX> arr2 = {0, 0, 0, 0, 0, 0};
+    MyArray<int, MAX> arr3 = {0, 0, 0, 0, 0, 0};
     ASSERT_EQ(arr.size(), 6); //size
     arr.front() = 1;
     ASSERT_EQ(arr.front(), 1);

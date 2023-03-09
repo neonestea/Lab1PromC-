@@ -141,14 +141,22 @@ private:
     size_t size_;
     
 public:
+    MyArray (std::initializer_list<T> list)
+    {
+        int counter = 0;
+        for( auto elem : list )
+        {
+            data_[counter] = elem ;
+            counter++;
+        }
+        size_ = N;
+        //data_[N] = 0;
+        //data_[0] = 0;
+    };
+
     MyArray ()
     {
-        for(size_t i = 0; i < N; ++i)// + 2; ++i)
-        {
-            
-            data_[i] = 0;
-            
-        }
+        
         size_ = N;
         //data_[N] = 0;
         //data_[0] = 0;
@@ -293,28 +301,16 @@ public:
         return data_[i];
     }
     
-    iterator at(int i) {
-        if (i >= size()) {
+    value_type& at(int i) {
+        if (i >= int(size())) {
             throw std::invalid_argument("Element not exist");
         }
 
-        auto begin_it = begin();
-        auto end_it = end();
-        int count = 0;
-        while (begin_it != end_it)
-        {
-            if (count == i)
-            {
-                return begin_it;
-            }
-            ++begin_it;
-            count++;
-        }
-        return NULL;
+        return data_[i];
         
     }
     
-    value_type& operator[](int i) const
+    value_type& operator[](size_t i) const
     {
         return data_[i];
     }
@@ -366,17 +362,22 @@ public:
         return size_ == 0;
     }
     
-    int size()
+    size_t size()
     {
         return size_;
     }
+
+    constexpr size_t sizeConstexpr() 
+    {
+        return N;
+    }
     template <class U, size_t K>
-    friend ostream& operator<< (ostream& , MyArray<U, K>&);
+    friend std::ostream& operator<< (std::ostream& , MyArray<U, K>&);
     
 };
 
 template <class T, size_t N>
-ostream& operator<< (ostream& out, MyArray<T, N>& arr)
+std::ostream& operator<< (std::ostream& out, MyArray<T, N>& arr)
 {
     for(size_t i = 0; i < arr.size_; ++i)
         {
