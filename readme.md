@@ -4,8 +4,8 @@
 4. Makefile:
     make test - run Google Test for MyArray
 5. To start wrapper: 
-    g++ -std=c++20 lab1_with_wrapper.cpp -o lab1_with_wrapper
-    ./lab1_with_wrapper
+    make
+    make wrap
 
 ДОКУМЕНТАЦИЯ
 array
