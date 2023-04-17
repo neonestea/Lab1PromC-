@@ -86,3 +86,44 @@ TEST_CASE("CheckEquals", "[array]")
 }
 
 
+TEST_CASE("CheckIterator", "[array]")
+{
+    MyArray<int, 3> arr = {0, 0, 0};
+    arr[0] = 1;
+    std::cout << "CHECK EL" << arr[0] << "\n";
+    arr[1] = 2;
+    arr[2] = 3;
+    int valueToCheck = 1;
+    
+    for (auto it = arr.begin(), end = arr.end(); it != end; ++it) {
+    const auto i = *it;
+    std::cout << "IS " << i << "\n";
+    std::cout << "SHOULD BE " << valueToCheck << "\n";
+    CHECK(i == valueToCheck);
+    valueToCheck++;
+    }
+}
+
+TEST_CASE("CheckReverseIterator", "[array]")
+{
+    MyArray<int, 3> arr = {0, 0, 0};
+    arr[0] = 1;
+    arr[1] = 2;
+    arr[2] = 3;
+    int valueToCheck = 3;
+    for (auto it = arr.rbegin(), end = arr.rend(); it != end; --it) {
+    const auto i = *it;
+    std::cout << "IS" << i << "\n";
+    std::cout << "SHOULD BE" << valueToCheck << "\n";
+    CHECK(i == valueToCheck);
+    valueToCheck--;
+    }
+
+}
+
+TEST_CASE("CheckAt", "[array]")
+{
+    MyArray<int, MAX> arr = {0, 0};
+    CHECK_THROWS_AS(arr.at(98), std::invalid_argument);
+
+}
