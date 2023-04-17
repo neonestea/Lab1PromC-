@@ -164,7 +164,7 @@ public:
     }
 
 	iterator end() {
-		return iterator(&data_[size_ + 1]);
+		return iterator(&data_[size_]);
     }
     
     reverseIterator rbegin() 
@@ -196,7 +196,7 @@ public:
 		return constReverseIterator(&data_[0] - 1);
     }
 
-    bool operator==(const MyArray& other)
+    bool operator==(const MyArray& other) const
     {
         
         if (size_ != other.size_)
@@ -214,7 +214,7 @@ public:
         return true;
     }
     
-    bool operator!=(const MyArray& other)
+    bool operator!=(const MyArray& other) const
     {
         if (size_ != other.size_)
         {
@@ -230,7 +230,7 @@ public:
         return false;
     }
     
-    bool operator>(const MyArray& other)
+    bool operator>(const MyArray& other) const
     {
         if (size_ < other.size_)
         {
@@ -250,7 +250,7 @@ public:
         return true;
     }
     
-    bool operator<(const MyArray& other)
+    bool operator<(const MyArray& other) const
     {
         if (size_ < other.size_)
         {
@@ -270,7 +270,7 @@ public:
         return false;
     }
     
-    bool operator>=(const MyArray& other)
+    bool operator>=(const MyArray& other) const
     {
         
         if (*this == other || *this > other)
@@ -280,7 +280,7 @@ public:
         return false;
     }
     
-    bool operator<=(const MyArray& other)
+    bool operator<=(const MyArray& other) const
     {
         
          if (*this == other || *this < other)
@@ -296,6 +296,9 @@ public:
     }
     
     value_type& at(int i) {
+        if (i >= int(size())) {
+            throw std::invalid_argument("Element not exist");
+        }
         return data_[i];
         
     }
@@ -311,19 +314,7 @@ public:
             throw std::invalid_argument("Element not exist");
         }
 
-        auto begin_it = begin();
-        auto end_it = end();
-        int count = 0;
-        while (begin_it != end_it)
-        {
-            if (count == i)
-            {
-                return begin_it;
-            }
-            ++begin_it;
-            count++;
-        }
-        return NULL;
+        return *(data_ + i);
         
     }
     
@@ -347,12 +338,12 @@ public:
         return data_[size_ - 1];
     }
     
-    bool empty()
+    bool empty() const
     {
         return size_ == 0;
     }
     
-    size_t size()
+    size_t size() const
     {
         return size_;
     }
