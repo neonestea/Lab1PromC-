@@ -29,6 +29,10 @@ print(system_run_command(['echo', "1", '|', array_wrapper_app]))
 print(system_run_command(['echo', "2", '|', array_wrapper_app]))
 print(system_run_command(['echo', "50", '|', array_wrapper_app]))
 
+#==
+#print(system_run_command(['echo', "2", '|', array_wrapper_app]))          пункт про !=
+#print(system_run_command(['echo', "1", '|', array_wrapper_app]))
+
 #!=
 print(system_run_command(['echo', "3", '|', array_wrapper_app]))
 print(system_run_command(['echo', "2", '|', array_wrapper_app]))
@@ -66,6 +70,14 @@ print(system_run_command(['echo', "1", '|', array_wrapper_app]))
 #front
 print(system_run_command(['echo', "11", '|', array_wrapper_app]))
 print(system_run_command(['echo', "2", '|', array_wrapper_app]))
+
+#back
+#print(system_run_command(['echo', "12", '|', array_wrapper_app]))   пункт про back
+#print(system_run_command(['echo', "4", '|', array_wrapper_app]))
+
+#print array
+#print(system_run_command(['echo', "13", '|', array_wrapper_app]))   пункт про итератор
+#print(system_run_command(['echo', "1", '|', array_wrapper_app]))
 
 #create
 print(system_run_command(['echo', "14", '|', array_wrapper_app]))
