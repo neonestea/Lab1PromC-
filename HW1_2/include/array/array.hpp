@@ -196,7 +196,7 @@ public:
 		return constReverseIterator(&data_[0] - 1);
     }
 
-    bool operator==(const MyArray& other)
+    bool operator==(const MyArray& other) const
     {
         
         if (size_ != other.size_) 
@@ -214,7 +214,7 @@ public:
         return true;
     }
     
-    bool operator!=(const MyArray& other)
+    bool operator!=(const MyArray& other) const
     {
         if (size_ != other.size_)
         {
@@ -230,7 +230,7 @@ public:
         return false;
     }
     
-    bool operator>(const MyArray& other)
+    bool operator>(const MyArray& other) const
     {
         if (size_ < other.size_)
         {
@@ -250,7 +250,7 @@ public:
         return true;
     }
     
-    bool operator<(const MyArray& other)
+    bool operator<(const MyArray& other) const
     {
         if (size_ < other.size_)
         {
@@ -270,7 +270,7 @@ public:
         return false;
     }
     
-    bool operator>=(const MyArray& other)
+    bool operator>=(const MyArray& other) const
     {
         
         if (*this == other || *this > other)
@@ -350,12 +350,12 @@ public:
         return data_[size_ - 1];
     }
     
-    bool empty()
+    bool empty() const
     {
         return size_ == 0;
     }
     
-    size_t size()
+    size_t size() const
     {
         return size_;
     }
