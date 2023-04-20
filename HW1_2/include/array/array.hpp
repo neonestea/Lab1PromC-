@@ -164,7 +164,7 @@ public:
     }
 
 	iterator end() {
-		return iterator(&data_[size_ + 1]);
+		return iterator(&data_[size_]); // +1 к сайзу не нужен
     }
     
     reverseIterator rbegin() 
@@ -199,7 +199,7 @@ public:
     bool operator==(const MyArray& other)
     {
         
-        if (size_ == other.size_)
+        if (size_ != other.size_) 
         {
             return false;
         }
@@ -296,6 +296,10 @@ public:
     }
     
     value_type& at(int i) {
+    	// Проверяем выход за пределы массива
+    	if (i >= int(size())) {
+		throw std::invalid_argument("Element not exist");
+	}
         return data_[i];
         
     }
@@ -307,6 +311,9 @@ public:
     
     constIterator at(int i) const
     {
+    	if (i >= int(size())) {
+		throw std::invalid_argument("Element not exist");
+	}
         auto begin_it = begin();
         auto end_it = end();
         int count = 0;
@@ -330,7 +337,7 @@ public:
     
     value_type& back()
     {
-        return data_[size_--];
+        return data_[size_];
     }
     
     value_type& front() const
