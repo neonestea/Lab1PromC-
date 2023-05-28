@@ -5,17 +5,30 @@
 
 #define MAX 6
 
-
+void createArray() {
+    std::cout << "CHECKING" << std::endl;
+    MyArray<int, MAX> arr({0, 0, 0, 0, 0, 0, 5, 54});
+    std::cout << arr[4];
+    std::cout << "STOP" << std::endl;
+}
 TEST_CASE("CheckSize", "[array]")
 {
-    MyArray<int, MAX> arr = {0, 0, 0, 0, 0, 0};
+    
+    
+    CHECK_THROWS_AS(createArray(), std::invalid_argument);
+    
+}
+
+TEST_CASE("CheckInitialization", "[array]")
+{
+    MyArray<int, MAX> arr({0, 0, 0, 0, 0, 0});
     CHECK(arr.size() == 6); //size
 
 }
 
 TEST_CASE("CheckRandomAccess", "[array]")
 {
-    MyArray<int, MAX> arr = {1, 2, 3, 4, 5, 6};
+    MyArray<int, MAX> arr({1, 2, 3, 4, 5, 6});
     CHECK(arr[0] == 1);
     CHECK(arr[1] == 2);
     CHECK(arr[2] == 3);
@@ -27,7 +40,7 @@ TEST_CASE("CheckRandomAccess", "[array]")
 
 TEST_CASE("CheckFront", "[array]")
 {
-    MyArray<int, MAX> arr = {0, 0, 0, 0, 0, 0};
+    MyArray<int, MAX> arr({0, 0, 0, 0, 0, 0});
     arr.front() = 1;
     CHECK(arr.front() == 1);
     //arr.frontConst() = 14; ошибка компиляции, правильно
@@ -37,7 +50,7 @@ TEST_CASE("CheckFront", "[array]")
 
 TEST_CASE("CheckBack", "[array]")
 {
-    MyArray<int, MAX> arr = {0, 0, 0, 0, 0, 0};
+    MyArray<int, MAX> arr({0, 0, 0, 0, 0, 0});
     arr.back() = 1;
     CHECK(arr.back() == 1);
     //arr.backConst() = 100;  ошибка компиляции, правильно
@@ -47,7 +60,7 @@ TEST_CASE("CheckBack", "[array]")
 
 TEST_CASE("CheckAt", "[array]")
 {
-    MyArray<int, MAX> arr = {0, 0};
+    MyArray<int, 2> arr({0, 0});
     CHECK_THROWS_AS(arr.at(98), std::invalid_argument);
     arr[0] = 3;
     CHECK(arr.at(0) == 3);
@@ -56,9 +69,9 @@ TEST_CASE("CheckAt", "[array]")
 
 TEST_CASE("CheckEquals", "[array]")
 {
-    MyArray<int, MAX> arr = {0, 0, 0, 0, 0, 0};
-    MyArray<int, MAX> arr2 = {0, 0, 0, 0, 0, 0};
-    MyArray<int, MAX> arr3 = {0, 0, 0, 0, 0, 0};
+    MyArray<int, MAX> arr({0, 0, 0, 0, 0, 0});
+    MyArray<int, MAX> arr2({0, 0, 0, 0, 0, 0});
+    MyArray<int, MAX> arr3({0, 0, 0, 0, 0, 0});
     arr.front() = 1;
     arr.back() = 6;
     arr[1] = 2;
@@ -98,7 +111,7 @@ TEST_CASE("CheckEquals", "[array]")
 
 TEST_CASE("CheckIterator", "[array]")
 {
-    MyArray<int, MAX> arr = {0, 0, 0, 0, 0, 0};
+    MyArray<int, MAX> arr({0, 0, 0, 0, 0, 0});
     arr[0] = 1;
     arr[1] = 2;
     arr[2] = 3;
@@ -134,7 +147,7 @@ TEST_CASE("CheckIterator", "[array]")
 
 TEST_CASE("CheckReverseIterator", "[array]")
 {
-    MyArray<int, MAX> arr = {0, 0, 0, 0, 0, 0};
+    MyArray<int, MAX> arr({0, 0, 0, 0, 0, 0});
     arr[0] = 1;
     arr[1] = 2;
     arr[2] = 3;
@@ -167,7 +180,7 @@ TEST_CASE("CheckReverseIterator", "[array]")
 
 TEST_CASE("CheckConstIterator", "[array]")
 {
-    MyArray<int, MAX> arr = {0, 0, 0, 0, 0, 0};
+    MyArray<int, MAX> arr({0, 0, 0, 0, 0, 0});
     arr[0] = 1;
     arr[1] = 2;
     arr[2] = 3;
@@ -189,7 +202,7 @@ TEST_CASE("CheckConstIterator", "[array]")
 
 TEST_CASE("CheckConstReverseIterator", "[array]")
 {
-    MyArray<int, MAX> arr = {0, 0, 0, 0, 0, 0};
+    MyArray<int, MAX> arr({0, 0, 0, 0, 0, 0});
     arr[0] = 1;
     arr[1] = 2;
     arr[2] = 3;
@@ -212,7 +225,7 @@ TEST_CASE("CheckConstReverseIterator", "[array]")
 
 TEST_CASE("CheckEmpty", "[array]")
 {
-    MyArray<int, MAX> arr = {0, 0, 0, 0, 0, 0};
+    MyArray<int, MAX> arr({0, 0, 0, 0, 0, 0});
     arr[1] = 2;
     arr[2] = 3;
     arr[3] = 4;
