@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <stdexcept>
-
+#include <iterator>
 
 
 template <class T, size_t N>
@@ -14,6 +14,7 @@ class MyArray
         using value_type = T;
         using reference = T&;
         using pointer = T*;
+        
     private:
         pointer ptr_;
     public:
@@ -33,6 +34,28 @@ class MyArray
             return tmp; 
             
         }
+
+        iterator& operator--() { 
+            ptr_--; return *this; 
+        }  
+    
+        // Postfix increment
+        iterator operator--(int) 
+        { 
+            iterator tmp = *this; 
+            --(*this); 
+            return tmp; 
+            
+        }
+
+        iterator operator[](int n) const { //random Access
+            iterator tmp = *this; 
+            for (int i = 0; i < n; ++i) {
+                ++tmp;
+            }
+            return tmp; 
+        }
+        
     
         friend bool operator== (const iterator& a, const iterator& b) { return a.ptr_ == b.ptr_; };
         friend bool operator!= (const iterator& a, const iterator& b) { return a.ptr_ != b.ptr_; };   
@@ -53,13 +76,25 @@ class MyArray
         pointer operator->() { return ptr_; }
     
         // Prefix increment
-        reverseIterator& operator--() { ptr_--; return *this; }  
+        reverseIterator& operator++() { ptr_--; return *this; }  
+    
+        // Postfix increment
+        reverseIterator operator++(int) 
+        { 
+            reverseIterator tmp = *this; 
+            --(*this); 
+            return tmp; 
+            
+        }
+
+        reverseIterator& operator--() { ptr_++; return *this; }  
     
         // Postfix increment
         reverseIterator operator--(int) 
         { 
             reverseIterator tmp = *this; 
-            --(*this); 
+            
+            ++(*this); 
             return tmp; 
             
         }
@@ -68,71 +103,13 @@ class MyArray
         friend bool operator!= (const reverseIterator& a, const reverseIterator& b) { return a.ptr_ != b.ptr_; };   
     
     };
-    class constIterator 
-    {
-        friend class MyArray;
-        using value_type = T;
-        using const_reference = value_type&;
-        using const_pointer = value_type*;
-    private:
-        const_pointer ptr_;
-    public:
-    
-    	constIterator(const const_pointer ptr) : ptr_(ptr) {}
-    	const_reference operator*() const { return *ptr_; }
-        const_pointer operator->() const  { return ptr_; }
-    
-        // Prefix increment
-        constIterator& operator++() const { ptr_++; return *this; }  
-    
-        // Postfix increment
-        constIterator operator++(int) const 
-        { 
-            constIterator tmp = *this; 
-            ++(*this); 
-            return tmp; 
-            
-        }
-    
-        friend bool operator== (const constIterator& a, const constIterator& b) { return a.ptr_ == b.ptr_; };
-        friend bool operator!= (const constIterator& a, const constIterator& b) { return a.ptr_ != b.ptr_; };   
-    
-    };
-    class constReverseIterator 
-    {
-        friend class MyArray;
-        using value_type = T;
-        using const_reference = value_type&;
-        using const_pointer = value_type*;
-    private:
-        const_pointer ptr_;
-    public:
-    
-    	constReverseIterator(const const_pointer ptr) : ptr_(ptr) {}
-    	const_pointer operator*() const { return *ptr_; }
-        const_pointer operator->() const { return ptr_; }
-    
-        // Prefix increment
-        constReverseIterator& operator--() const { ptr_--; return *this; }  
-    
-        // Postfix increment
-        constReverseIterator operator--(int) const 
-        { 
-            constReverseIterator tmp = *this; 
-            --(*this); 
-            return tmp; 
-            
-        }
-    
-        friend bool operator== (const constReverseIterator& a, const constReverseIterator& b) { return a.ptr_ == b.ptr_; };
-        friend bool operator!= (const constReverseIterator& a, const constReverseIterator& b) { return a.ptr_ != b.ptr_; };   
-    
-    };
+
 private:
     using value_type = T;
     using reference = value_type&;
-    value_type data_[N];//+ 2];
-    size_t size_;
+    value_type data_[N];
+    typedef const iterator constIterator;
+    typedef const reverseIterator constReverseIterator;
     
 public:
     MyArray (std::initializer_list<T> list)
@@ -143,19 +120,13 @@ public:
             data_[counter] = elem ;
             counter++;
         }
-        size_ = N;
-        //data_[N] = 0;
-        //data_[0] = 0;
+        
     };
 
     MyArray ()
     {
         
-        size_ = N;
-        //data_[N] = 0;
-        //data_[0] = 0;
     };
-    
     
     
     iterator begin() 
@@ -164,34 +135,34 @@ public:
     }
 
 	iterator end() {
-		return iterator(&data_[size_]); // +1 к сайзу не нужен
+		return iterator(&data_[N]); 
     }
     
     reverseIterator rbegin() 
 	{
-		return reverseIterator(&data_[size_ -1]);
+		return reverseIterator(&data_[N - 1]);
     }
 
 	reverseIterator rend() {
-		return reverseIterator(&data_[0] - 1);
+		return reverseIterator(&data_[0]);
     }
     
-    constIterator begin() const
+    constIterator beginConst() const
 	{
 		return constIterator(&data_[0]);
     }
 
-	constIterator end() const
+	constIterator endConst() const
 	{
-		return constIterator(&data_[size_]);
+		return constIterator(&data_[N]);
     }
     
-    constReverseIterator rbegin() const
+    constReverseIterator rbeginConst() const
 	{
-		return constReverseIterator(&data_[size_ - 1]);
+		return constReverseIterator(&data_[N - 1]);
     }
 
-	constReverseIterator rend() const 
+	constReverseIterator rendConst() const 
 	{
 		return constReverseIterator(&data_[0] - 1);
     }
@@ -199,12 +170,12 @@ public:
     bool operator==(const MyArray& other) const
     {
         
-        if (size_ != other.size_) 
+        if (N != other.size()) 
         {
             return false;
         }
         
-        for(size_t i = 0; i < size_; ++i)
+        for(size_t i = 0; i < N; ++i)
         {
             if (data_[i] != other.data_[i])
             {
@@ -216,11 +187,11 @@ public:
     
     bool operator!=(const MyArray& other) const
     {
-        if (size_ != other.size_)
+        if (N != other.size())
         {
             return true;
         }
-        for(size_t i = 0; i < size_; ++i)
+        for(size_t i = 0; i < N; ++i)
         {
             if (data_[i] != other.data_[i])
             {
@@ -232,15 +203,15 @@ public:
     
     bool operator>(const MyArray& other) const
     {
-        if (size_ < other.size_)
+        if (N < other.size())
         {
             return false;
         }
-        if (size_ > other.size_)
+        if (N > other.size())
         {
             return true;
         }
-        for(size_t i = 0; i < size_; ++i)
+        for(size_t i = 0; i < N; ++i)
         {
             if (data_[i] < other.data_[i])
             {
@@ -252,15 +223,15 @@ public:
     
     bool operator<(const MyArray& other) const
     {
-        if (size_ < other.size_)
+        if (N < other.size())
         {
             return true;
         }
-        if (size_ > other.size_)
+        if (N > other.size())
         {
             return false;
         }
-        for(size_t i = 0; i < size_; ++i)
+        for(size_t i = 0; i < N; ++i)
         {
             if (data_[i] > other.data_[i])
             {
@@ -280,7 +251,7 @@ public:
         return false;
     }
     
-    bool operator<=(const MyArray& other)
+    bool operator<=(const MyArray& other) const
     {
         
          if (*this == other || *this < other)
@@ -292,7 +263,10 @@ public:
     
     value_type& operator[](int i)
     {
-        return data_[i];
+        //return data_[i];
+        auto it = iterator(&data_[0]);
+        std::cout << *it[i] << std::endl;
+        return *it[i];
     }
     
     value_type& at(int i) {
@@ -304,9 +278,11 @@ public:
         
     }
     
-    value_type& operator[](size_t i) const
+    const value_type& operator[](size_t i) const
     {
-        return data_[i];
+        auto it = constIterator(&data_[0]);
+        std::cout << *it[i] << std::endl;
+        return *it[i];
     }
     
     constIterator at(int i) const
@@ -337,27 +313,27 @@ public:
     
     value_type& back()
     {
-        return data_[size_];
+        return data_[N- 1];
     }
     
-    value_type& front() const
+    const value_type& frontConst() const
     {
         return data_[0];
     }
     
-    value_type& back() const
+    const value_type& backConst() const
     {
-        return data_[size_ - 1];
+        return data_[N - 1];
     }
     
     bool empty() const
     {
-        return size_ == 0;
+        return N == 0;
     }
     
     size_t size() const
     {
-        return size_;
+        return N;
     }
 
     constexpr size_t sizeConstexpr() 
@@ -372,10 +348,9 @@ public:
 template <class T, size_t N>
 std::ostream& operator<< (std::ostream& out, MyArray<T, N>& arr)
 {
-    for(size_t i = 0; i < arr.size_; ++i)
+    for(size_t i = 0; i < arr.size(); ++i)
         {
             out << arr.data_[i] << " ";
         };
     return out;
 }
-
