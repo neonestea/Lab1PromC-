@@ -14,12 +14,14 @@ class MyArray
         using value_type = T;
         using reference = T&;
         using pointer = T*;
+        friend class MyArray;
         
     private:
         pointer ptr_;
+        iterator(pointer ptr) : ptr_(ptr) {}
     public:
     
-    	iterator(pointer ptr) : ptr_(ptr) {}
+    	
     	reference operator*() const { return *ptr_; }
         pointer operator->() { return ptr_; }
     
@@ -69,9 +71,10 @@ class MyArray
         using pointer = T*;
     private:
         pointer ptr_;
+        reverseIterator(pointer ptr) : ptr_(ptr) {}
     public:
     
-    	reverseIterator(pointer ptr) : ptr_(ptr) {}
+    	
     	reference operator*() const { return *ptr_; }
         pointer operator->() { return ptr_; }
     
@@ -112,14 +115,13 @@ private:
     typedef const reverseIterator constReverseIterator;
     
 public:
-    MyArray (std::initializer_list<T> list)
+    explicit MyArray (const std::initializer_list<T> list)
     {
-        int counter = 0;
-        for( auto elem : list )
-        {
-            data_[counter] = elem ;
-            counter++;
+       
+        if (list.size() != N) {
+            throw std::invalid_argument("Incorrect size of initializer list");   
         }
+        std::copy(list.begin(), list.end(), data_);
         
     };
 
