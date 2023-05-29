@@ -26,12 +26,9 @@ TEST_CASE("CheckInitialization", "[array]")
 TEST_CASE("CheckRandomAccess", "[array]")
 {
     MyArray<int, MAX> arr({1, 2, 3, 4, 5, 6});
-    CHECK(arr[0] == 1);
-    CHECK(arr[1] == 2);
-    CHECK(arr[2] == 3);
-    CHECK(arr[3] == 4);
-    CHECK(arr[4] == 5);
-    CHECK(arr[5] == 6);
+     for (int i = 0; i < MAX; ++i) {
+         CHECK(arr[i] == i + 1);
+    }
 
 }
 
@@ -71,24 +68,17 @@ TEST_CASE("CheckEquals", "[array]")
     MyArray<int, MAX> arr3({0, 0, 0, 0, 0, 0});
     arr.front() = 1;
     arr.back() = 6;
-    arr[1] = 2;
-    arr[2] = 3;
-    arr[3] = 4;
-    arr[4] = 5;
 
-    arr2[0] = 1;
-    arr2[1] = 2;
-    arr2[2] = 3;
-    arr2[3] = 4;
-    arr2[4] = 5;
-    arr2[5] = 6;
-
-    arr3[0] = 6;
-    arr3[1] = 5;
-    arr3[2] = 4;
-    arr3[3] = 3;
-    arr3[4] = 2;
-    arr3[5] = 1;
+    for (int i = 0; i < MAX; ++i) {
+        if (i != 0 && i != MAX) {
+            arr[i] = i + 1;
+        }
+        arr2[i] = i + 1;
+        arr3[i] = MAX - i;
+    }
+    std::cout << arr << std::endl;
+    std::cout << arr2 << std::endl;
+    std::cout << arr3 << std::endl;
 
     bool eq12 = arr == arr2;
     bool neq12 = arr != arr2;
@@ -109,12 +99,10 @@ TEST_CASE("CheckEquals", "[array]")
 TEST_CASE("CheckIterator", "[array]")
 {
     MyArray<int, MAX> arr({0, 0, 0, 0, 0, 0});
-    arr[0] = 1;
-    arr[1] = 2;
-    arr[2] = 3;
-    arr[3] = 4;
-    arr[4] = 5;
-    arr[5] = 6;
+    for (int i = 0; i < MAX; ++i) {
+        
+        arr[i] = i + 1;
+    }
 
 
     int valueToCheck = 6;
@@ -143,12 +131,10 @@ TEST_CASE("CheckIterator", "[array]")
 TEST_CASE("CheckReverseIterator", "[array]")
 {
     MyArray<int, MAX> arr({0, 0, 0, 0, 0, 0});
-    arr[0] = 1;
-    arr[1] = 2;
-    arr[2] = 3;
-    arr[3] = 4;
-    arr[4] = 5;
-    arr[5] = 6;
+    for (int i = 0; i < MAX; ++i) {
+        
+        arr[i] = i + 1;
+    }
     int valueToCheck = 6;
     
     for (auto it = arr.rbegin(), end = arr.rend(); it != end; ++it) { 
@@ -174,12 +160,10 @@ TEST_CASE("CheckReverseIterator", "[array]")
 TEST_CASE("CheckConstIterator", "[array]")
 {
     MyArray<int, MAX> arr({0, 0, 0, 0, 0, 0});
-    arr[0] = 1;
-    arr[1] = 2;
-    arr[2] = 3;
-    arr[3] = 4;
-    arr[4] = 5;
-    arr[5] = 6;
+    for (int i = 0; i < MAX; ++i) {
+        
+        arr[i] = i + 1;
+    }
 
     int valueToCheck = 1;
     for (auto it = arr.begin(), end = arr.end(); it != end; ++it) { 
@@ -194,12 +178,10 @@ TEST_CASE("CheckConstIterator", "[array]")
 TEST_CASE("CheckConstReverseIterator", "[array]")
 {
     MyArray<int, MAX> arr({0, 0, 0, 0, 0, 0});
-    arr[0] = 1;
-    arr[1] = 2;
-    arr[2] = 3;
-    arr[3] = 4;
-    arr[4] = 5;
-    arr[5] = 6;
+    for (int i = 0; i < MAX; ++i) {
+        
+        arr[i] = i + 1;
+    }
     int valueToCheck = 6;
     for (auto it = arr.rbegin(), end = arr.rend(); it != end; ++it) { 
         const auto i = *it; 
@@ -216,10 +198,10 @@ TEST_CASE("CheckConstReverseIterator", "[array]")
 TEST_CASE("CheckEmpty", "[array]")
 {
     MyArray<int, MAX> arr({0, 0, 0, 0, 0, 0});
-    arr[1] = 2;
-    arr[2] = 3;
-    arr[3] = 4;
-    arr[4] = 5;
+    for (int i = 0; i < MAX; ++i) {
+        
+        arr[i] = i;
+    }
     CHECK_FALSE(arr.empty());
 
 
