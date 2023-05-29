@@ -22,7 +22,10 @@ class MyArray
     public:
     
     	
-    	reference operator*() const { return *ptr_; }
+    	reference operator*() const { 
+            //iterator tmp = *ptr_; 
+            return *ptr_; 
+        }
         pointer operator->() { return ptr_; }
     
         // Prefix increment
@@ -50,15 +53,20 @@ class MyArray
             
         }
 
-        iterator operator[](int n) const { //random Access
+        iterator operator[](int n) const { //random Access, доступ О(1)
             iterator tmp = *this; 
-            for (int i = 0; i < n; ++i) {
-                ++tmp;
-            }
-            return tmp; 
+            tmp += n;
+            return tmp;
         }
         
-    
+        
+        iterator& operator+=(std::ptrdiff_t n) { //смещаем указатель
+            
+            ptr_ += n; 
+            return *this;
+        }
+
+
         friend bool operator== (const iterator& a, const iterator& b) { return a.ptr_ == b.ptr_; };
         friend bool operator!= (const iterator& a, const iterator& b) { return a.ptr_ != b.ptr_; };   
     
@@ -75,11 +83,16 @@ class MyArray
     public:
     
     	
-    	reference operator*() const { return *ptr_; }
+    	reference operator*() const { 
+            //reverseIterator tmp = *this;
+            
+            return *ptr_; 
+        }
+
         pointer operator->() { return ptr_; }
     
         // Prefix increment
-        reverseIterator& operator++() { ptr_--; return *this; }  
+        reverseIterator& operator++() { --ptr_; return *this; }  
     
         // Postfix increment
         reverseIterator operator++(int) 
@@ -90,7 +103,7 @@ class MyArray
             
         }
 
-        reverseIterator& operator--() { ptr_++; return *this; }  
+        reverseIterator& operator--() { ++ptr_; return *this; }  
     
         // Postfix increment
         reverseIterator operator--(int) 
@@ -100,6 +113,19 @@ class MyArray
             ++(*this); 
             return tmp; 
             
+        }
+
+        reverseIterator operator[](int n) const { //random Access, доступ О(1)
+            iterator tmp = *this; 
+            tmp -= n;
+            return tmp;
+        }
+        
+        
+        reverseIterator& operator-=(std::ptrdiff_t n) { //смещаем указатель
+            
+            ptr_ -= n; 
+            return *this;
         }
     
         friend bool operator== (const reverseIterator& a, const reverseIterator& b) { return a.ptr_ == b.ptr_; };
@@ -115,9 +141,8 @@ private:
     typedef const reverseIterator constReverseIterator;
     
 public:
-    explicit MyArray (const std::initializer_list<T> list)
+    explicit MyArray (const std::initializer_list<T>& list)
     {
-       
         if (list.size() != N) {
             throw std::invalid_argument("Incorrect size of initializer list");   
         }
@@ -137,7 +162,7 @@ public:
     }
 
 	iterator end() {
-		return iterator(&data_[N]); 
+		return iterator(&data_[N - 1]); 
     }
     
     reverseIterator rbegin() 
@@ -171,76 +196,26 @@ public:
 
     bool operator==(const MyArray& other) const
     {
-        
-        if (N != other.size()) 
-        {
-            return false;
-        }
-        
-        for(size_t i = 0; i < N; ++i)
-        {
-            if (data_[i] != other.data_[i])
-            {
-                return false;
-            }
-        }
-        return true;
+        return (N == other.size() && std::equal(data_, data_ + N, other.data_));
     }
     
     bool operator!=(const MyArray& other) const
     {
-        if (N != other.size())
-        {
-            return true;
-        }
-        for(size_t i = 0; i < N; ++i)
-        {
-            if (data_[i] != other.data_[i])
-            {
-                return true;
-            }
-        }
-        return false;
+        return (N == other.size() && !std::equal(data_, data_ + N, other.data_));
     }
     
     bool operator>(const MyArray& other) const
     {
-        if (N < other.size())
-        {
-            return false;
-        }
-        if (N > other.size())
-        {
-            return true;
-        }
-        for(size_t i = 0; i < N; ++i)
-        {
-            if (data_[i] < other.data_[i])
-            {
-                return false;
-            }
-        }
-        return true;
+        size_t n1 = N;
+        size_t n2 = other.size();
+        return !std::lexicographical_compare(data_, data_ + n1, other.data_, other.data_ + n2);
     }
     
     bool operator<(const MyArray& other) const
     {
-        if (N < other.size())
-        {
-            return true;
-        }
-        if (N > other.size())
-        {
-            return false;
-        }
-        for(size_t i = 0; i < N; ++i)
-        {
-            if (data_[i] > other.data_[i])
-            {
-                return true;
-            }
-        }
-        return false;
+        size_t n1 = N;
+        size_t n2 = other.size();
+        return std::lexicographical_compare(data_, data_ + n1, other.data_, other.data_ + n2);
     }
     
     bool operator>=(const MyArray& other) const
@@ -267,7 +242,6 @@ public:
     {
         //return data_[i];
         auto it = iterator(&data_[0]);
-        std::cout << *it[i] << std::endl;
         return *it[i];
     }
     
@@ -283,7 +257,6 @@ public:
     const value_type& operator[](size_t i) const
     {
         auto it = constIterator(&data_[0]);
-        std::cout << *it[i] << std::endl;
         return *it[i];
     }
     
