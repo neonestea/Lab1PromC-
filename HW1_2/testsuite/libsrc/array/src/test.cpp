@@ -6,10 +6,7 @@
 #define MAX 6
 
 void createArray() {
-    std::cout << "CHECKING" << std::endl;
     MyArray<int, MAX> arr({0, 0, 0, 0, 0, 0, 5, 54});
-    std::cout << arr[4];
-    std::cout << "STOP" << std::endl;
 }
 TEST_CASE("CheckSize", "[array]")
 {
@@ -121,9 +118,7 @@ TEST_CASE("CheckIterator", "[array]")
 
 
     int valueToCheck = 6;
-    //std::cout << *arr.end();
-    //std::cout << *arr.begin();
-    for (auto it = --arr.end(), end = arr.begin(); it != end; --it) {
+    for (auto it = arr.end(), end = arr.begin(); it != end; --it) {
         const auto i = *it;
     
         CHECK(i == valueToCheck);
@@ -158,7 +153,6 @@ TEST_CASE("CheckReverseIterator", "[array]")
     
     for (auto it = arr.rbegin(), end = arr.rend(); it != end; ++it) { 
         auto i = *it; 
-        std::cout << "Is " << i << " should be " << valueToCheck << "\n";
         
         CHECK(i == valueToCheck);
         valueToCheck--;
@@ -167,7 +161,6 @@ TEST_CASE("CheckReverseIterator", "[array]")
    
     for (auto it = arr.rend(), end = arr.rbegin(); it != end; --it) {
         const auto i = *it;
-        std::cout << "Is " << i << " should be " << valueToCheck << "\n";
         CHECK(i == valueToCheck);
         valueToCheck++;
     }
@@ -188,11 +181,9 @@ TEST_CASE("CheckConstIterator", "[array]")
     arr[4] = 5;
     arr[5] = 6;
 
-    std::cout << arr << "\n";
     int valueToCheck = 1;
     for (auto it = arr.begin(), end = arr.end(); it != end; ++it) { 
         auto i = *it; 
-        std::cout << i << "\n";
         CHECK(i == valueToCheck);
         valueToCheck++;
     }
@@ -212,7 +203,6 @@ TEST_CASE("CheckConstReverseIterator", "[array]")
     int valueToCheck = 6;
     for (auto it = arr.rbegin(), end = arr.rend(); it != end; ++it) { 
         const auto i = *it; 
-        std::cout << i << "\n";
         CHECK(i == valueToCheck);
         valueToCheck--;
     }
