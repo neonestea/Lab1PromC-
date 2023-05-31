@@ -35,24 +35,16 @@ b.	reference operator*() const – оператор непрямого обра�
 c.	pointer operator->()- оператор  для получения члена структуры
 d.	iterator& operator++() – префиксный инкремент для прямого порядка
 e.	iterator operator++(int) – постфиксный инкремент для прямого порядка
-f.	iterator& operator--() – префиксный декремент для обратного порядка
-g.	iterator operator--(int) – постфиксный декремент для обратного порядка
-h.	iterator operator[](int n) const – метод для рандомного доступа
-h1. iterator operator+=(std::ptrdiff_t n) const – метод для смещения указателя
-i.	friend bool operator== (const iterator& a, const iterator& b) – оператор равенства
-j.	friend bool operator!= (const iterator& a, const iterator& b) – оператор неравенства
+i.	bool operator== (const iterator& b) – оператор равенства
+j.	bool operator!= (const iterator& b) – оператор неравенства
 2.	reverseIterator – итератор обратного порядка с поддержанием возможности прямого порядка. Ниже прямым порядком называется обратный и наоборот
 a.	reverseIterator(pointer ptr)- конструктор, принимающий указатель
 b.	reference operator*() const – оператор непрямого обращения
 c.	pointer operator->()- оператор  для получения члена структуры
 d.	reverseIterator& operator++() – префиксный инкремент для прямого порядка
 e.	reverseIterator operator++(int) – постфиксный инкремент для прямого порядка
-f.	reverseIterator & operator--() – префиксный декремент для обратного порядка
-g.	reverseIterator operator--(int) – постфиксный декремент для обратного порядка
-h.	reverseIterator operator[](int n) const – метод для рандомного доступа
-h1. reverseIterator operator-=(std::ptrdiff_t n) const – метод для смещения указателя
-i.	friend bool operator== (const reverseIterator & a, const reverseIterator & b) – оператор равенства
-j.	friend bool operator!= (const reverseIterator & a, const reverseIterator & b) – оператор неравенства
+i.	bool operator== (const reverseIterator & b) – оператор равенства
+j.	bool operator!= (const reverseIterator & b) – оператор неравенства
 3.	Также поддерживается опция константных итераторов
 a.	typedef const iterator constIterator
 b.	typedef const reverseIterator constReverseIterator
