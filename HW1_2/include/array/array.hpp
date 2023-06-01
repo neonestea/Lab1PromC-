@@ -202,7 +202,7 @@ public:
     
     bool operator!=(const MyArray& other) const
     {
-        return (N == other.size() && !std::equal(data_, data_ + N, other.data_));
+        return !(*this == other);
     }
     
     bool operator>(const MyArray& other) const
