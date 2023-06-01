@@ -29,7 +29,7 @@ class MyArray
         pointer operator->() { return ptr_; }
     
         // Prefix increment
-        iterator& operator++() { ptr_++; return *this; }  
+        iterator& operator++() { ++ptr_; return *this; }  
     
         // Postfix increment
         iterator operator++(int) 
@@ -40,8 +40,9 @@ class MyArray
             
         }
 
-        iterator& operator--() { 
-            ptr_--; return *this; 
+        /*iterator& operator--() { 
+            --ptr_; 
+            return *this; 
         }  
     
         // Postfix increment
@@ -64,11 +65,11 @@ class MyArray
             
             ptr_ += n; 
             return *this;
-        }
+        }*/
 
 
-        friend bool operator== (const iterator& a, const iterator& b) { return a.ptr_ == b.ptr_; };
-        friend bool operator!= (const iterator& a, const iterator& b) { return a.ptr_ != b.ptr_; };   
+        bool operator== (const iterator& b) { return ptr_ == b.ptr_; };
+        bool operator!= (const iterator& b) { return ptr_ != b.ptr_; };   
     
     };
     class reverseIterator 
@@ -103,7 +104,7 @@ class MyArray
             
         }
 
-        reverseIterator& operator--() { ++ptr_; return *this; }  
+        /*reverseIterator& operator--() { ++ptr_; return *this; }  
     
         // Postfix increment
         reverseIterator operator--(int) 
@@ -126,10 +127,10 @@ class MyArray
             
             ptr_ -= n; 
             return *this;
-        }
+        }*/
     
-        friend bool operator== (const reverseIterator& a, const reverseIterator& b) { return a.ptr_ == b.ptr_; };
-        friend bool operator!= (const reverseIterator& a, const reverseIterator& b) { return a.ptr_ != b.ptr_; };   
+        bool operator== (const reverseIterator& b) { return ptr_ == b.ptr_; };
+        bool operator!= (const reverseIterator& b) { return ptr_ != b.ptr_; };   
     
     };
 
@@ -162,7 +163,7 @@ public:
     }
 
 	iterator end() {
-		return iterator(&data_[N - 1]); 
+		return iterator(&data_[N]); 
     }
     
     reverseIterator rbegin() 
@@ -240,9 +241,9 @@ public:
     
     value_type& operator[](int i)
     {
-        //return data_[i];
-        auto it = iterator(&data_[0]);
-        return *it[i];
+        return data_[i];
+        //auto it = iterator(&data_[0]);
+        //return *it[i];
     }
     
     value_type& at(int i) {
