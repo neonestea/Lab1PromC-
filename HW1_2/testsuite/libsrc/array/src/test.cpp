@@ -183,7 +183,7 @@ TEST_CASE("CheckConstIterator", "[array]")
     }
 
     int valueToCheck = 1;
-    for (auto it = arr.begin(), end = arr.end(); it != end; ++it) { 
+    for (auto it = arr.beginConst(), end = arr.endConst(); it != end; ++it) { 
         CHECK(*it == valueToCheck);
         valueToCheck++;
     }
@@ -199,7 +199,7 @@ TEST_CASE("CheckConstReverseIterator", "[array]")
         arr[i] = i + 1;
     }
     int valueToCheck = 6;
-    for (auto it = arr.rbegin(), end = arr.rend(); it != end; ++it) { 
+    for (auto it = arr.rbeginConst(), end = arr.rendConst(); it != end; ++it) { 
         CHECK(*it == valueToCheck);
         valueToCheck--;
     }
