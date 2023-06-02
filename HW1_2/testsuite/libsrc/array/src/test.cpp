@@ -8,6 +8,19 @@
 void createArray() {
     MyArray<int, MAX> arr({0, 0, 0, 0, 0, 0, 5, 54});
 }
+
+void getEndElement() {
+    MyArray<int, MAX> arr({1, 2, 3, 4,5, 6});
+    auto it = arr.end();
+    std::cout << *it << std::endl;
+}
+
+void getREndElement() {
+    MyArray<int, MAX> arr({1, 2, 3, 4,5, 6});
+    auto it = arr.rend();
+    std::cout << *it << std::endl;
+}
+
 TEST_CASE("CheckSize", "[array]")
 {
     
@@ -76,7 +89,9 @@ TEST_CASE("CheckEquals", "[array]")
         arr2[i] = i + 1;
         arr3[i] = MAX - i;
     }
- 
+    //std::cout << arr << std::endl;
+    //std::cout << arr2 << std::endl;
+    //std::cout << arr3 << std::endl;
 
     bool eq12 = arr == arr2;
     bool neq12 = arr != arr2;
@@ -84,13 +99,14 @@ TEST_CASE("CheckEquals", "[array]")
     bool ge13 = arr >= arr3;
     bool s13 = arr < arr3;
     bool se13 = arr <= arr3;
+    bool se12 = arr <= arr3;
     CHECK(eq12 == 1);
     CHECK(neq12 == 0);
     CHECK(g13 == 0);
     CHECK(ge13 == 0);
     CHECK(s13 == 1);
     CHECK(se13 == 1);
-
+    CHECK(se12 == 1);
 }
 
 
@@ -99,19 +115,24 @@ TEST_CASE("CheckIterator", "[array]")
     MyArray<int, MAX> arr({0, 0, 0, 0, 0, 0});
     
     int counter = 1;
+    
     for (auto it = arr.begin(), end = arr.end(); it != end; ++it) { 
         
         *it = counter;
         counter++;
     }
-    
+    //int a = 1;
+    //int* ap = &a;
+    //auto it = arr.begin();
+    //bool eq = it == ap;
+    //std::cout << eq << std::endl;
     /*int valueToCheck = 6;
     for (auto it = --arr.end(), end = arr.begin(); it != end; --it) {
         CHECK(*it == valueToCheck);
         std::cout << "Is " << *it << " should be " << valueToCheck << std::endl;
         valueToCheck--;
     }*/
-
+    CHECK_THROWS_AS(getEndElement(), std::invalid_argument);
     int valueToCheck = 1;
     for (auto it = arr.begin(), end = arr.end(); it != end; ++it) { 
         
@@ -120,9 +141,7 @@ TEST_CASE("CheckIterator", "[array]")
         valueToCheck++;
     }
     *arr.begin() = 100;
-    *arr.end() = 200;
     CHECK(*arr.begin() == 100);
-    CHECK(*arr.end() == 200);
 
 }
 
@@ -141,6 +160,7 @@ TEST_CASE("CheckReverseIterator", "[array]")
         //std::cout << "Is " << *it << " should be " << valueToCheck << std::endl;
         valueToCheck--;
     }
+    CHECK_THROWS_AS(getREndElement(), std::invalid_argument);
     /*valueToCheck = 1;
    
     for (auto it = arr.rend(), end = arr.rbegin(); it != end; --it) {
@@ -150,9 +170,7 @@ TEST_CASE("CheckReverseIterator", "[array]")
         valueToCheck++;
     }*/
     *arr.rbegin() = 100;
-    *arr.rend() = 200;
     CHECK(*arr.rbegin() == 100);
-    CHECK(*arr.rend() == 200);
 
 }
 
