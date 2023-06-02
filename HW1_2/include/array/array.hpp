@@ -8,150 +8,93 @@
 template <class T, size_t N>
 class MyArray
 {
+    template <typename U>
     class iterator 
     {
         friend class MyArray;
-        using value_type = T;
-        using reference = T&;
-        using pointer = T*;
+        using value_type = U;
+        using reference = U&;
+        using pointer = U*;
         friend class MyArray;
         
     private:
         pointer ptr_;
-        int index;
-        int max_index;
-        iterator(pointer ptr, int idx, int max) : ptr_(ptr), index(idx), max_index(max) {}
+        iterator(pointer ptr) : ptr_(ptr) {}
+        iterator(const iterator<U>& it) = default;
     public:
     
     	
-    	reference operator*() const { 
-            //std::cout << "index " << index << " max " << max_index << std::endl;
-            if (index == -1 || index == max_index) {
-                throw std::invalid_argument("Trying to get element out of range");   
-            }
-            
+    	reference operator*() { 
             return *ptr_; 
         }
+
+        const U& operator*() const {
+            return *ptr_; 
+        }
+
+
         pointer operator->() { 
-            if (index == -1 || index == max_index) {
-                throw std::invalid_argument("Trying to get element out of range");   
-            }
             return ptr_; 
         }
     
         // Prefix increment
-        iterator& operator++() { ++ptr_; ++index; return *this; }  
+        iterator<U>& operator++() { ++ptr_; return *this; }  
     
         // Postfix increment
-        iterator operator++(int) 
+        iterator<U> operator++(int) 
         { 
             iterator tmp = *this; 
             ++(*this); 
-            ++index;
             return tmp; 
             
         }
-
-        /*iterator& operator--() { 
-            --ptr_; 
-            return *this; 
-        }  
-    
-        // Postfix increment
-        iterator operator--(int) 
-        { 
-            iterator tmp = *this; 
-            --(*this); 
-            return tmp; 
-            
-        }
-
-        iterator operator[](int n) const { //random Access, доступ О(1)
-            iterator tmp = *this; 
-            tmp += n;
-            return tmp;
-        }
-        
-        
-        iterator& operator+=(std::ptrdiff_t n) { //смещаем указатель
-            
-            ptr_ += n; 
-            return *this;
-        }*/
-
 
         bool operator== (const iterator& b) { return ptr_ == b.ptr_; };
         bool operator!= (const iterator& b) { return ptr_ != b.ptr_; };   
     
     };
+
+    template <typename U>
     class reverseIterator 
     {
         friend class MyArray;
-        using value_type = T;
-        using reference = T&;
-        using pointer = T*;
+        using value_type = U;
+        using reference = U&;
+        using pointer = U*;
+        friend class MyArray;
+        
     private:
         pointer ptr_;
-        int index;
-        int max_index;
-        reverseIterator(pointer ptr, int idx, int max) : ptr_(ptr), index(idx), max_index(max) {}
+        reverseIterator(pointer ptr) : ptr_(ptr) {}
+        reverseIterator(const reverseIterator<U>& it) = default;
     public:
     
     	
-    	reference operator*() const { 
-            //reverseIterator tmp = *this;
-            //std::cout << "index " << index << " max " << max_index << std::endl;
-            if (index == -1 || index == max_index) {
-                throw std::invalid_argument("Trying to get element out of range");   
-            }
+    	reference operator*() { 
             return *ptr_; 
         }
 
+        const U& operator*() const {
+            return *ptr_; 
+        }
+
+
         pointer operator->() { 
-            if (index == -1 || index == max_index) {
-                throw std::invalid_argument("Trying to get element out of range");   
-            }
             return ptr_; 
         }
     
         // Prefix increment
-        reverseIterator& operator++() { --ptr_; --index; return *this; }  
+        reverseIterator<U>& operator++() { --ptr_; return *this; }  
     
-        // Postfix increment
-        reverseIterator operator++(int) 
+        // referenceIterator increment
+        reverseIterator<U> operator++(int) 
         { 
-            reverseIterator tmp = *this; 
-            --(*this); 
-            --index;
-            return tmp; 
-            
-        }
-
-        /*reverseIterator& operator--() { ++ptr_; return *this; }  
-    
-        // Postfix increment
-        reverseIterator operator--(int) 
-        { 
-            reverseIterator tmp = *this; 
-            
-            ++(*this); 
-            return tmp; 
-            
-        }
-
-        reverseIterator operator[](int n) const { //random Access, доступ О(1)
             iterator tmp = *this; 
-            tmp -= n;
-            return tmp;
-        }
-        
-        
-        reverseIterator& operator-=(std::ptrdiff_t n) { //смещаем указатель
+            --(*this); 
+            return tmp; 
             
-            ptr_ -= n; 
-            return *this;
-        }*/
-    
+        }
+
         bool operator== (const reverseIterator& b) { return ptr_ == b.ptr_; };
         bool operator!= (const reverseIterator& b) { return ptr_ != b.ptr_; };   
     
@@ -161,8 +104,8 @@ private:
     using value_type = T;
     using reference = value_type&;
     value_type data_[N];
-    typedef const iterator constIterator;
-    typedef const reverseIterator constReverseIterator;
+    //typedef const iterator constIterator;
+    //typedef const reverseIterator constReverseIterator;
     
 public:
     explicit MyArray (const std::initializer_list<T>& list)
@@ -180,42 +123,42 @@ public:
     };
     
     
-    iterator begin() 
+    iterator<value_type> begin() 
 	{
-		return iterator(&data_[0], 0, N);
+		return iterator<value_type>(&data_[0]);
     }
 
-	iterator end() {
-		return iterator(&data_[N], N, N); 
+	iterator<value_type> end() {
+		return iterator<value_type>(&data_[N]); 
     }
     
-    reverseIterator rbegin() 
+    reverseIterator<value_type> rbegin() 
 	{
-		return reverseIterator(&data_[N - 1], N - 1, N);
+		return reverseIterator<value_type>(&data_[N - 1]);
     }
 
-	reverseIterator rend() {
-		return reverseIterator(&data_[0], -1, N);
+	reverseIterator<value_type> rend() {
+		return reverseIterator<value_type>(&data_[0]);
     }
     
-    constIterator beginConst()
+    iterator<const value_type> beginConst()
 	{
-		return constIterator(&data_[0], 0, N);
+		return iterator<const value_type>(&data_[0]);
     }
 
-	constIterator endConst()
+	iterator<const value_type> endConst()
 	{
-		return constIterator(&data_[N], N, N);
+		return iterator<const value_type>(&data_[N]);
     }
     
-    constReverseIterator rbeginConst()
+    reverseIterator<const value_type> rbeginConst()
 	{
-		return constReverseIterator(&data_[N - 1], N - 1, N);
+		return reverseIterator<const value_type>(&data_[N - 1]);
     }
 
-	constReverseIterator rendConst()
+	reverseIterator<const value_type> rendConst()
 	{
-		return constReverseIterator(&data_[0], -1, N);
+		return reverseIterator<const value_type>(&data_[0]);
     }
 
     bool operator==(const MyArray& other) const
@@ -245,28 +188,27 @@ public:
     
     bool operator>=(const MyArray& other) const
     {
-        return (*this == other || *this > other);
+        return !(*this < other);
         
     }
     
     bool operator<=(const MyArray& other) const
     {
         
-        return (*this == other || *this < other);
+        return !(*this > other);
     }
     
     value_type& operator[](int i)
     {
         return data_[i];
-        //auto it = iterator(&data_[0]);
-        //return *it[i];
+        
     }
     
     value_type& at(int i) {
     	// Проверяем выход за пределы массива
     	if (i >= int(size())) {
 		throw std::invalid_argument("Element not exist");
-	}
+	    }
         return data_[i];
         
     }
@@ -276,24 +218,12 @@ public:
         return data_[i];
     }
     
-    constIterator at(int i) const
+    const value_type atConst(int i) const
     {
     	if (i >= int(size())) {
 		throw std::invalid_argument("Element not exist");
-	}
-        auto begin_it = begin();
-        auto end_it = end();
-        int count = 0;
-        while (begin_it != end_it)
-        {
-            if (count == i)
-            {
-                return begin_it;
-            }
-            ++begin_it;
-            count++;
-        }
-        return NULL;
+	    }
+        return data_[i];
         
     }
     
