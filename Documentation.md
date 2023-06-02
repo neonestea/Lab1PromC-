@@ -29,25 +29,26 @@
 1.	data_ - статический массив типа value_type
 Обертка: Изначально будет создано 5 пустых массивов: MyArray<int, MAX> arr = {0, 0, 0, 0, 0, 0}; //пример создания массива - пусть работаем с типом int
 Вспомогательные классы:
-1.	iterator – итератор прямого порядка с поддержанием возможности обратного порядка и рандомного индекса
+1.	iterator – итератор прямого порядка с поддержанием возможности обратного порядка и рандомного индекса, класс шаблонный для реализации const и обычного итератора
 a.	iterator(pointer ptr)- конструктор, принимающий указатель
-b.	reference operator*() const – оператор непрямого обращения
+a1.	iterator(const iterator<U>& it)- конструктор константного итератора
+b.	reference operator*() – оператор непрямого обращения
+b1. const U& operator*() const – оператор непрямого обращения для константного итератора
 c.	pointer operator->()- оператор  для получения члена структуры
 d.	iterator& operator++() – префиксный инкремент для прямого порядка
 e.	iterator operator++(int) – постфиксный инкремент для прямого порядка
 i.	bool operator== (const iterator& b) – оператор равенства
 j.	bool operator!= (const iterator& b) – оператор неравенства
-2.	reverseIterator – итератор обратного порядка с поддержанием возможности прямого порядка. Ниже прямым порядком называется обратный и наоборот
+2.	reverseIterator – итератор обратного порядка с поддержанием возможности прямого порядка. Ниже прямым порядком называется обратный и наоборот, класс шаблонный для реализации const и обычного итератора
 a.	reverseIterator(pointer ptr)- конструктор, принимающий указатель
-b.	reference operator*() const – оператор непрямого обращения
+a1.	reverseIterator(const reverseIterator<U>& it)- конструктор константного итератора
+b.	reference operator*() – оператор непрямого обращения
+b1. const U& operator*() const – оператор непрямого обращения для константного итератора
 c.	pointer operator->()- оператор  для получения члена структуры
 d.	reverseIterator& operator++() – префиксный инкремент для прямого порядка
 e.	reverseIterator operator++(int) – постфиксный инкремент для прямого порядка
-i.	bool operator== (const reverseIterator & b) – оператор равенства
-j.	bool operator!= (const reverseIterator & b) – оператор неравенства
-3.	Также поддерживается опция константных итераторов
-a.	typedef const iterator constIterator
-b.	typedef const reverseIterator constReverseIterator
+i.	bool operator== (const reverseIterator& b) – оператор равенства
+j.	bool operator!= (const reverseIterator& b) – оператор неравенства
 
 Размер определен макросом #define MAX 6
 Будет реализована в виде цикла while с switch case – цифрами, идентифицирующими операцию:
