@@ -11,10 +11,10 @@
 3.	Operator at() - обращение к элементу в указанной позиции, возвращаем data_[i]; Value_type& at(int i) {};
 4.	Empty – проверка, что size_ == 0 bool empty(){};
 5.	Size – размер (количество элементов) (size_) size_t size() {};
-6.	Begin – начало итератора +const iterator iterator begin() {};
-7.	End - конец итератора +const iterator iterator end() {};
-8.	rBegin – наоборот +const iterator reverseIterator rbegin() {};
-9.	rEnd - наоборот +const iterator reverseIterator rend() {};
+6.	Begin – начало итератора +const iterator iterator begin() {};, указывает на первый элемент
+7.	End - конец итератора +const iterator iterator end() {};, указывает на элемент за последним
+8.	rBegin – наоборот +const iterator reverseIterator rbegin() {};, указывает на последний элемент
+9.	rEnd - наоборот +const iterator reverseIterator rend() {};, указывает на элемент перед первым
 10.	Вывод в стандартный поток (friend функция) (пользуемся итератором и выводим каждый элемент) friend std::ostream& operator<< (std::ostream& out, const MyArray& arr);
 11.	Operator== - оператор равенства (по элементам) (проходим итератором, сравниваем элементы) bool operator==(const MyArray& other){};
 12.	Operator!= - оператор неравенства (по элементам) (аналогично п.10) bool operator!=(const MyArray& other){};
