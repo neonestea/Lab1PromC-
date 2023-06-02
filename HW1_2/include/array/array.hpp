@@ -198,22 +198,22 @@ public:
 		return reverseIterator(&data_[0], -1, N);
     }
     
-    constIterator beginConst() const
+    constIterator beginConst()
 	{
 		return constIterator(&data_[0], 0, N);
     }
 
-	constIterator endConst() const
+	constIterator endConst()
 	{
 		return constIterator(&data_[N], N, N);
     }
     
-    constReverseIterator rbeginConst() const
+    constReverseIterator rbeginConst()
 	{
 		return constReverseIterator(&data_[N - 1], N - 1, N);
     }
 
-	constReverseIterator rendConst() const 
+	constReverseIterator rendConst()
 	{
 		return constReverseIterator(&data_[0], -1, N);
     }
