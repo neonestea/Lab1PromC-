@@ -4,329 +4,225 @@
 #include <stdexcept>
 
 
-
 template <class T, size_t N>
 class MyArray
 {
+    template <typename U>
     class iterator 
     {
         friend class MyArray;
-        using value_type = T;
-        using reference = T&;
-        using pointer = T*;
+        using value_type = U;
+        using reference = U&;
+        using pointer = U*;
+        friend class MyArray;
+        
     private:
         pointer ptr_;
+        iterator(pointer ptr) : ptr_(ptr) {}
+        iterator(const iterator<U>& it) = default;
     public:
     
-    	iterator(pointer ptr) : ptr_(ptr) {}
-    	reference operator*() const { return *ptr_; }
-        pointer operator->() { return ptr_; }
+    	
+    	reference operator*() { 
+            return *ptr_; 
+        }
+
+        const U& operator*() const {
+            return *ptr_; 
+        }
+
+
+        pointer operator->() { 
+            return ptr_; 
+        }
     
         // Prefix increment
-        iterator& operator++() { ptr_++; return *this; }  
+        iterator<U>& operator++() { ++ptr_; return *this; }  
     
         // Postfix increment
-        iterator operator++(int) 
+        iterator<U> operator++(int) 
         { 
             iterator tmp = *this; 
             ++(*this); 
             return tmp; 
             
         }
-    
-        friend bool operator== (const iterator& a, const iterator& b) { return a.ptr_ == b.ptr_; };
-        friend bool operator!= (const iterator& a, const iterator& b) { return a.ptr_ != b.ptr_; };   
+
+        bool operator== (const iterator& b) { return ptr_ == b.ptr_; };
+        bool operator!= (const iterator& b) { return ptr_ != b.ptr_; };   
     
     };
+
+    template <typename U>
     class reverseIterator 
     {
         friend class MyArray;
-        using value_type = T;
-        using reference = T&;
-        using pointer = T*;
+        using value_type = U;
+        using reference = U&;
+        using pointer = U*;
+        friend class MyArray;
+        
     private:
         pointer ptr_;
+        reverseIterator(pointer ptr) : ptr_(ptr) {}
+        reverseIterator(const reverseIterator<U>& it) = default;
     public:
     
-    	reverseIterator(pointer ptr) : ptr_(ptr) {}
-    	reference operator*() const { return *ptr_; }
-        pointer operator->() { return ptr_; }
+    	
+    	reference operator*() { 
+            return *ptr_; 
+        }
+
+        const U& operator*() const {
+            return *ptr_; 
+        }
+
+
+        pointer operator->() { 
+            return ptr_; 
+        }
     
         // Prefix increment
-        reverseIterator& operator--() { ptr_--; return *this; }  
+        reverseIterator<U>& operator++() { --ptr_; return *this; }  
     
-        // Postfix increment
-        reverseIterator operator--(int) 
+        // referenceIterator increment
+        reverseIterator<U> operator++(int) 
         { 
-            reverseIterator tmp = *this; 
+            iterator tmp = *this; 
             --(*this); 
             return tmp; 
             
         }
-    
-        friend bool operator== (const reverseIterator& a, const reverseIterator& b) { return a.ptr_ == b.ptr_; };
-        friend bool operator!= (const reverseIterator& a, const reverseIterator& b) { return a.ptr_ != b.ptr_; };   
-    
-    };
-    class constIterator 
-    {
-        friend class MyArray;
-        using value_type = T;
-        using const_reference = value_type&;
-        using const_pointer = value_type*;
-    private:
-        const_pointer ptr_;
-    public:
-    
-    	constIterator(const const_pointer ptr) : ptr_(ptr) {}
-    	const_reference operator*() const { return *ptr_; }
-        const_pointer operator->() const  { return ptr_; }
-    
-        // Prefix increment
-        constIterator& operator++() const { ptr_++; return *this; }  
-    
-        // Postfix increment
-        constIterator operator++(int) const 
-        { 
-            constIterator tmp = *this; 
-            ++(*this); 
-            return tmp; 
-            
-        }
-    
-        friend bool operator== (const constIterator& a, const constIterator& b) { return a.ptr_ == b.ptr_; };
-        friend bool operator!= (const constIterator& a, const constIterator& b) { return a.ptr_ != b.ptr_; };   
+
+        bool operator== (const reverseIterator& b) { return ptr_ == b.ptr_; };
+        bool operator!= (const reverseIterator& b) { return ptr_ != b.ptr_; };   
     
     };
-    class constReverseIterator 
-    {
-        friend class MyArray;
-        using value_type = T;
-        using const_reference = value_type&;
-        using const_pointer = value_type*;
-    private:
-        const_pointer ptr_;
-    public:
-    
-    	constReverseIterator(const const_pointer ptr) : ptr_(ptr) {}
-    	const_pointer operator*() const { return *ptr_; }
-        const_pointer operator->() const { return ptr_; }
-    
-        // Prefix increment
-        constReverseIterator& operator--() const { ptr_--; return *this; }  
-    
-        // Postfix increment
-        constReverseIterator operator--(int) const 
-        { 
-            constReverseIterator tmp = *this; 
-            --(*this); 
-            return tmp; 
-            
-        }
-    
-        friend bool operator== (const constReverseIterator& a, const constReverseIterator& b) { return a.ptr_ == b.ptr_; };
-        friend bool operator!= (const constReverseIterator& a, const constReverseIterator& b) { return a.ptr_ != b.ptr_; };   
-    
-    };
+
 private:
     using value_type = T;
     using reference = value_type&;
-    value_type data_[N];//+ 2];
-    size_t size_;
+    value_type data_[N];
+    //typedef const iterator constIterator;
+    //typedef const reverseIterator constReverseIterator;
     
 public:
-    MyArray (std::initializer_list<T> list)
+    explicit MyArray (const std::initializer_list<T>& list)
     {
-        int counter = 0;
-        for( auto elem : list )
-        {
-            data_[counter] = elem ;
-            counter++;
+        if (list.size() != N) {
+            throw std::invalid_argument("Incorrect size of initializer list");   
         }
-        size_ = N;
-        //data_[N] = 0;
-        //data_[0] = 0;
+        std::copy(list.begin(), list.end(), data_);
+        
     };
 
     MyArray ()
     {
         
-        size_ = N;
-        //data_[N] = 0;
-        //data_[0] = 0;
     };
     
     
-    
-    iterator begin() 
+    iterator<value_type> begin() 
 	{
-		return iterator(&data_[0]);
+		return iterator<value_type>(&data_[0]);
     }
 
-	iterator end() {
-		return iterator(&data_[size_]); // +1 к сайзу не нужен
+	iterator<value_type> end() {
+		return iterator<value_type>(&data_[N]); 
     }
     
-    reverseIterator rbegin() 
+    reverseIterator<value_type> rbegin() 
 	{
-		return reverseIterator(&data_[size_ -1]);
+		return reverseIterator<value_type>(&data_[N - 1]);
     }
 
-	reverseIterator rend() {
-		return reverseIterator(&data_[0] - 1);
+	reverseIterator<value_type> rend() {
+		return reverseIterator<value_type>(&data_[0]);
     }
     
-    constIterator begin() const
+    iterator<const value_type> beginConst()
 	{
-		return constIterator(&data_[0]);
+		return iterator<const value_type>(&data_[0]);
     }
 
-	constIterator end() const
+	iterator<const value_type> endConst()
 	{
-		return constIterator(&data_[size_]);
+		return iterator<const value_type>(&data_[N]);
     }
     
-    constReverseIterator rbegin() const
+    reverseIterator<const value_type> rbeginConst()
 	{
-		return constReverseIterator(&data_[size_ - 1]);
+		return reverseIterator<const value_type>(&data_[N - 1]);
     }
 
-	constReverseIterator rend() const 
+	reverseIterator<const value_type> rendConst()
 	{
-		return constReverseIterator(&data_[0] - 1);
+		return reverseIterator<const value_type>(&data_[0]);
     }
 
     bool operator==(const MyArray& other) const
     {
-        
-        if (size_ != other.size_) 
-        {
-            return false;
-        }
-        
-        for(size_t i = 0; i < size_; ++i)
-        {
-            if (data_[i] != other.data_[i])
-            {
-                return false;
-            }
-        }
-        return true;
+        return (N == other.size() && std::equal(data_, data_ + N, other.data_));
     }
     
     bool operator!=(const MyArray& other) const
     {
-        if (size_ != other.size_)
-        {
-            return true;
-        }
-        for(size_t i = 0; i < size_; ++i)
-        {
-            if (data_[i] != other.data_[i])
-            {
-                return true;
-            }
-        }
-        return false;
+        return !(*this == other);
     }
     
     bool operator>(const MyArray& other) const
     {
-        if (size_ < other.size_)
-        {
-            return false;
-        }
-        if (size_ > other.size_)
-        {
-            return true;
-        }
-        for(size_t i = 0; i < size_; ++i)
-        {
-            if (data_[i] < other.data_[i])
-            {
-                return false;
-            }
-        }
-        return true;
+        size_t n1 = N;
+        size_t n2 = other.size();
+        return !std::lexicographical_compare(data_, data_ + n1, other.data_, other.data_ + n2)
+        && !(*this == other);
     }
     
     bool operator<(const MyArray& other) const
     {
-        if (size_ < other.size_)
-        {
-            return true;
-        }
-        if (size_ > other.size_)
-        {
-            return false;
-        }
-        for(size_t i = 0; i < size_; ++i)
-        {
-            if (data_[i] > other.data_[i])
-            {
-                return true;
-            }
-        }
-        return false;
+        size_t n1 = N;
+        size_t n2 = other.size();
+        return std::lexicographical_compare(data_, data_ + n1, other.data_, other.data_ + n2);
     }
     
     bool operator>=(const MyArray& other) const
     {
+        return !(*this < other);
         
-        if (*this == other || *this > other)
-        {
-            return true;
-        }
-        return false;
     }
     
-    bool operator<=(const MyArray& other)
+    bool operator<=(const MyArray& other) const
     {
         
-         if (*this == other || *this < other)
-        {
-            return true;
-        }
-        return false;
+        return !(*this > other);
     }
     
     value_type& operator[](int i)
     {
         return data_[i];
+        
     }
     
     value_type& at(int i) {
     	// Проверяем выход за пределы массива
     	if (i >= int(size())) {
 		throw std::invalid_argument("Element not exist");
-	}
+	    }
         return data_[i];
         
     }
     
-    value_type& operator[](size_t i) const
+    const value_type& operator[](size_t i) const
     {
         return data_[i];
     }
     
-    constIterator at(int i) const
+    const value_type atConst(int i) const
     {
     	if (i >= int(size())) {
 		throw std::invalid_argument("Element not exist");
-	}
-        auto begin_it = begin();
-        auto end_it = end();
-        int count = 0;
-        while (begin_it != end_it)
-        {
-            if (count == i)
-            {
-                return begin_it;
-            }
-            ++begin_it;
-            count++;
-        }
-        return NULL;
+	    }
+        return data_[i];
         
     }
     
@@ -337,27 +233,27 @@ public:
     
     value_type& back()
     {
-        return data_[size_];
+        return data_[N- 1];
     }
     
-    value_type& front() const
+    const value_type& frontConst() const
     {
         return data_[0];
     }
     
-    value_type& back() const
+    const value_type& backConst() const
     {
-        return data_[size_ - 1];
+        return data_[N - 1];
     }
     
     bool empty() const
     {
-        return size_ == 0;
+        return N == 0;
     }
     
     size_t size() const
     {
-        return size_;
+        return N;
     }
 
     constexpr size_t sizeConstexpr() 
@@ -372,10 +268,9 @@ public:
 template <class T, size_t N>
 std::ostream& operator<< (std::ostream& out, MyArray<T, N>& arr)
 {
-    for(size_t i = 0; i < arr.size_; ++i)
+    for(size_t i = 0; i < arr.size(); ++i)
         {
             out << arr.data_[i] << " ";
         };
     return out;
 }
-
