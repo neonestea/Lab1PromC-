@@ -18,24 +18,36 @@ class MyArray
         
     private:
         pointer ptr_;
-        iterator(pointer ptr) : ptr_(ptr) {}
+        int index;
+        int max_index;
+        iterator(pointer ptr, int idx, int max) : ptr_(ptr), index(idx), max_index(max) {}
     public:
     
     	
     	reference operator*() const { 
-            //iterator tmp = *ptr_; 
+            //std::cout << "index " << index << " max " << max_index << std::endl;
+            if (index == -1 || index == max_index) {
+                throw std::invalid_argument("Trying to get element out of range");   
+            }
+            
             return *ptr_; 
         }
-        pointer operator->() { return ptr_; }
+        pointer operator->() { 
+            if (index == -1 || index == max_index) {
+                throw std::invalid_argument("Trying to get element out of range");   
+            }
+            return ptr_; 
+        }
     
         // Prefix increment
-        iterator& operator++() { ++ptr_; return *this; }  
+        iterator& operator++() { ++ptr_; ++index; return *this; }  
     
         // Postfix increment
         iterator operator++(int) 
         { 
             iterator tmp = *this; 
             ++(*this); 
+            ++index;
             return tmp; 
             
         }
@@ -80,26 +92,37 @@ class MyArray
         using pointer = T*;
     private:
         pointer ptr_;
-        reverseIterator(pointer ptr) : ptr_(ptr) {}
+        int index;
+        int max_index;
+        reverseIterator(pointer ptr, int idx, int max) : ptr_(ptr), index(idx), max_index(max) {}
     public:
     
     	
     	reference operator*() const { 
             //reverseIterator tmp = *this;
-            
+            //std::cout << "index " << index << " max " << max_index << std::endl;
+            if (index == -1 || index == max_index) {
+                throw std::invalid_argument("Trying to get element out of range");   
+            }
             return *ptr_; 
         }
 
-        pointer operator->() { return ptr_; }
+        pointer operator->() { 
+            if (index == -1 || index == max_index) {
+                throw std::invalid_argument("Trying to get element out of range");   
+            }
+            return ptr_; 
+        }
     
         // Prefix increment
-        reverseIterator& operator++() { --ptr_; return *this; }  
+        reverseIterator& operator++() { --ptr_; --index; return *this; }  
     
         // Postfix increment
         reverseIterator operator++(int) 
         { 
             reverseIterator tmp = *this; 
             --(*this); 
+            --index;
             return tmp; 
             
         }
@@ -159,40 +182,40 @@ public:
     
     iterator begin() 
 	{
-		return iterator(&data_[0]);
+		return iterator(&data_[0], 0, N);
     }
 
 	iterator end() {
-		return iterator(&data_[N]); 
+		return iterator(&data_[N], N, N); 
     }
     
     reverseIterator rbegin() 
 	{
-		return reverseIterator(&data_[N - 1]);
+		return reverseIterator(&data_[N - 1], N - 1, N);
     }
 
 	reverseIterator rend() {
-		return reverseIterator(&data_[0]);
+		return reverseIterator(&data_[0], -1, N);
     }
     
     constIterator beginConst() const
 	{
-		return constIterator(&data_[0]);
+		return constIterator(&data_[0], 0, N);
     }
 
 	constIterator endConst() const
 	{
-		return constIterator(&data_[N]);
+		return constIterator(&data_[N], N, N);
     }
     
     constReverseIterator rbeginConst() const
 	{
-		return constReverseIterator(&data_[N - 1]);
+		return constReverseIterator(&data_[N - 1], N - 1, N);
     }
 
 	constReverseIterator rendConst() const 
 	{
-		return constReverseIterator(&data_[0] - 1);
+		return constReverseIterator(&data_[0], -1, N);
     }
 
     bool operator==(const MyArray& other) const
@@ -209,7 +232,8 @@ public:
     {
         size_t n1 = N;
         size_t n2 = other.size();
-        return !std::lexicographical_compare(data_, data_ + n1, other.data_, other.data_ + n2);
+        return !std::lexicographical_compare(data_, data_ + n1, other.data_, other.data_ + n2)
+        && !(*this == other);
     }
     
     bool operator<(const MyArray& other) const
@@ -221,22 +245,14 @@ public:
     
     bool operator>=(const MyArray& other) const
     {
+        return (*this == other || *this > other);
         
-        if (*this == other || *this > other)
-        {
-            return true;
-        }
-        return false;
     }
     
     bool operator<=(const MyArray& other) const
     {
         
-         if (*this == other || *this < other)
-        {
-            return true;
-        }
-        return false;
+        return (*this == other || *this < other);
     }
     
     value_type& operator[](int i)
@@ -257,8 +273,7 @@ public:
     
     const value_type& operator[](size_t i) const
     {
-        auto it = constIterator(&data_[0]);
-        return *it[i];
+        return data_[i];
     }
     
     constIterator at(int i) const
